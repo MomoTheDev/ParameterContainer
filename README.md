@@ -58,8 +58,13 @@ public class ExampleClass {
 
     public ExampleClass() {
         container = ParameterHandler.create();
+        
+        // The key/value method
         container.add("Price", 5);
+        
+        // The entry meethod
         container.add(ParameterHandler.entry("someValue", 7));
+        
     }
   
 }
