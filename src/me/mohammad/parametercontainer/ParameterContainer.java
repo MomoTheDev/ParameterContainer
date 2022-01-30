@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ParameterContainer {
 
-	private Map<String, Object> parameters;
+	protected Map<String, Object> parameters;
 
 	protected ParameterContainer() {
 		parameters = new HashMap<>();
@@ -21,12 +21,24 @@ public class ParameterContainer {
 		return true;
 	}
 	
+	public ParameterContainer addAll(final ParameterContainer container) {
+		for (final Map.Entry<String, Object> entry : container.parameters.entrySet())
+			add(entry.getKey(), entry.getValue());
+		return this;
+	}
+	
 	public ParameterContainer add(final ParameterEntry entry) {
 		return add(entry.getKey(), entry.getValue());
 	}
 
 	public ParameterContainer add(final String key, final Object object) {
 		parameters.put(key, object);
+		return this;
+	}
+	
+	public ParameterContainer removeAll(final ParameterContainer container) {
+		for (final Map.Entry<String, Object> entry : container.parameters.entrySet())
+			remove(entry.getKey());
 		return this;
 	}
 
@@ -69,6 +81,10 @@ public class ParameterContainer {
 
 	public Double getDouble(final String key) {
 		return Double.parseDouble((String) get(key));
+	}
+	
+	public ParameterContainer clone() {
+		return new ParameterContainer().addAll(this);
 	}
 
 }
