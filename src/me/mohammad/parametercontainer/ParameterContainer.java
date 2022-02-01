@@ -202,7 +202,7 @@ public class ParameterContainer {
 	 * */
 	
 	public String getString(final String key) {
-		return (String) get(key);
+		return String.valueOf(get(key));
 	}
 	
 	/**
@@ -215,7 +215,7 @@ public class ParameterContainer {
 	 * */
 
 	public Byte getByte(final String key) {
-		return Byte.parseByte((String) get(key));
+		return Byte.parseByte((String) getString(key));
 	}
 
 	/**
@@ -228,7 +228,7 @@ public class ParameterContainer {
 	 * */
 	
 	public Short getShort(final String key) {
-		return Short.parseShort((String) get(key));
+		return Short.parseShort((String) getString(key));
 	}
 
 	/**
@@ -241,7 +241,7 @@ public class ParameterContainer {
 	 * */
 	
 	public Integer getInteger(final String key) {
-		return Integer.parseInt((String) get(key));
+		return Integer.parseInt((String) getString(key));
 	}
 	
 	/**
@@ -254,7 +254,7 @@ public class ParameterContainer {
 	 * */
 
 	public Long getLong(final String key) {
-		return Long.parseLong((String) get(key));
+		return Long.parseLong((String) getString(key));
 	}
 
 	/**
@@ -267,7 +267,7 @@ public class ParameterContainer {
 	 * */
 	
 	public Float getFloat(final String key) {
-		return Float.parseFloat((String) get(key));
+		return Float.parseFloat((String) getString(key));
 	}
 
 	/**
@@ -280,7 +280,7 @@ public class ParameterContainer {
 	 * */
 	
 	public Double getDouble(final String key) {
-		return Double.parseDouble((String) get(key));
+		return Double.parseDouble((String) getString(key));
 	}
 	
 	/**
