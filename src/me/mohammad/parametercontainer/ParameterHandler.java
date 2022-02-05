@@ -1,5 +1,11 @@
 package me.mohammad.parametercontainer;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class ParameterHandler {
@@ -32,6 +38,60 @@ public class ParameterHandler {
 	
 	protected static void acceptInvalid(final String key) {
 		invalid.accept(key);
+	}
+	
+	/**
+	 * Creates a ParameterContainer using the entries in the file
+	 * 
+	 * @param file the file to get the entries from
+	 * 
+	 * @return returns a new ParameterContainer with the entries
+	 * 
+	 * */
+	
+	public static ParameterContainer fromFile(final File file) throws IOException {
+		if (!(file.exists()))
+			return create();
+		final ParameterContainer container = create();
+		final FileReader fileReader = new FileReader(file);
+		String nextLine;
+		final BufferedReader reader = new BufferedReader(fileReader);
+		while ((nextLine = reader.readLine()) != null) {
+			final String[] args = nextLine.split(" : ");
+			if (args.length != 2) {
+				reader.close();
+				System.out.printf("Invalid Syntax at: \"%s\"", nextLine);
+				return container;
+			}
+			container.add(args[0], args[1]);
+		}
+		reader.close();
+		return container;
+	}
+	
+	/**
+	 * Saves the given ParameterContainer to the file
+	 * 
+	 * @param container the container to save
+	 * @param file the file to save to
+	 * 
+	 * @return returns the file that contains the entries
+	 * 
+	 * */
+	
+	public static File toFile(final ParameterContainer container, final File file) {
+		try {
+			file.delete();
+			file.createNewFile();
+			final FileWriter writer = new FileWriter(file);;
+			for (final Map.Entry<String, Object> entry : container.getMapEntries())
+				writer.write(String.format("%s : %s\n", entry.getKey(), entry.getValue()));
+			writer.close();
+			return file;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return file;
+		}
 	}
 	
 	/**
