@@ -1,12 +1,22 @@
 package me.mohammad.parametercontainer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+
+/**
+ * 
+ * The main class of this library. Can be publicly constructed using {@link ParameterHandler.create(ParameterEntry...); }
+ * or loaded from a file using {@link ParameterHandler.fromFile(File); }
+ * 
+ * @author Mohammad Alkhatib
+ * 
+ * */
 
 public class ParameterContainer {
 
@@ -43,13 +53,24 @@ public class ParameterContainer {
 	}
 	
 	/**
+	 * Checks if this {@link ParameterContainer } contains any values
+	 * 
+	 * @return returns true if there are no values contained, false otherwise
+	 * 
+	 * */
+	
+	public boolean isEmpty() {
+		return parameters.isEmpty();
+	}
+	
+	/**
 	 * Maps all the map entry and returns them in a list of parameter entries
 	 * 
 	 * @apiNote this might take more time than <pre>getMapEntries()</pre> on a higher entry count
 	 * 
 	 * @see getMapEntries();
 	 * 
-	 * @return returns a list with all the parameter entries
+	 * @return returns a copied list with all the parameter entries
 	 * 
 	 * */
 	
@@ -57,20 +78,33 @@ public class ParameterContainer {
 		final List<ParameterEntry> entries = new ArrayList<>();
 		for (final Map.Entry<String, Object> entry : parameters.entrySet())
 			entries.add(ParameterHandler.entry(entry.getKey(), entry.getValue()));
+		Collections.sort(entries, new Comparator<ParameterEntry>() {
+			@Override
+            public int compare(final ParameterEntry firstEntry, final ParameterEntry secondEntry) {
+				return firstEntry.getKey().compareTo(secondEntry.getKey());
+            }
+		});
 		return entries;
 	}
 	
 	/**
-	 * Get's an entry set with all the map entries
+	 * Get's a list with all the map entries
 	 * 
 	 * @see getParameterEntries();
 	 * 
-	 * @return returns a set with all the map entries
+	 * @return returns a copied list with all the map entries
 	 * 
 	 * */
 	
-	public Set<Map.Entry<String, Object>> getMapEntries() {
-		return parameters.entrySet();
+	public List<Map.Entry<String, Object>> getMapEntries() {
+		final List<Map.Entry<String, Object>> entries = new ArrayList<>(parameters.entrySet());
+		Collections.sort(entries, new Comparator<Map.Entry<String, Object>>() {
+			@Override
+            public int compare(final Map.Entry<String, Object> firstEntry, final Map.Entry<String, Object> secondEntry) {
+				return firstEntry.getKey().compareTo(secondEntry.getKey());
+            }
+		});
+		return entries;
 	}
 
 	/**
@@ -103,9 +137,9 @@ public class ParameterContainer {
 	 * 
 	 * */
 	
-	public ParameterContainer addAll(final ParameterContainer container) {
+	public ParameterContainer setAll(final ParameterContainer container) {
 		for (final Map.Entry<String, Object> entry : container.parameters.entrySet())
-			add(entry.getKey(), entry.getValue());
+			set(entry.getKey(), entry.getValue());
 		return this;
 	}
 	
@@ -118,8 +152,8 @@ public class ParameterContainer {
 	 * 
 	 * */
 	
-	public ParameterContainer add(final ParameterEntry entry) {
-		return add(entry.getKey(), entry.getValue());
+	public ParameterContainer set(final ParameterEntry entry) {
+		return set(entry.getKey(), entry.getValue());
 	}
 
 	/**
@@ -132,7 +166,7 @@ public class ParameterContainer {
 	 * 
 	 * */
 	
-	public ParameterContainer add(final String key, final Object object) {
+	public ParameterContainer set(final String key, final Object object) {
 		parameters.put(key, object);
 		return this;
 	}
@@ -180,24 +214,37 @@ public class ParameterContainer {
 	}
 	
 	/**
-	 * Returns the value stored using that key as an Object
+	 * Returns the Object stored using that key
 	 * 
 	 * @param key the key to get the value of
 	 * 
-	 * @return returns the value as an Object
+	 * @return returns the Object stored using the given key
 	 * 
 	 * */
 
 	public Object get(final String key) {
 		return parameters.get(key);
 	}
-
+	
 	/**
-	 * Returns the value stored using that key as a parsed String
+	 * Returns the Character stored using that key
 	 * 
 	 * @param key the key to get the value of
 	 * 
-	 * @return returns the value as a parsed String
+	 * @return returns the Character stored using the given key
+	 * 
+	 * */
+	
+	public Character getCharacter(final String key) {
+		return Character.valueOf(getString(key).charAt(0));
+	}
+
+	/**
+	 * Returns the String stored using that key
+	 * 
+	 * @param key the key to get the value of
+	 * 
+	 * @return returns the String stored using the given key
 	 * 
 	 * */
 	
@@ -206,81 +253,94 @@ public class ParameterContainer {
 	}
 	
 	/**
-	 * Returns the value stored using that key as a parsed Byte
+	 * Returns the Boolean stored using that key
 	 * 
 	 * @param key the key to get the value of
 	 * 
-	 * @return returns the value as a parsed Byte
+	 * @return returns the Boolean stored using the given key
+	 * 
+	 * */
+	
+	public Boolean getBoolean(final String key) {
+		return Boolean.parseBoolean(getString(key));
+	}
+	
+	/**
+	 * Returns the Byte stored using that key
+	 * 
+	 * @param key the key to get the value of
+	 * 
+	 * @return returns the Byte stored using the given key
 	 * 
 	 * */
 
 	public Byte getByte(final String key) {
-		return Byte.parseByte((String) getString(key));
+		return Byte.parseByte(getString(key));
 	}
 
 	/**
-	 * Returns the value stored using that key as a parsed Short
+	 * Returns the Short stored using that key
 	 * 
 	 * @param key the key to get the value of
 	 * 
-	 * @return returns the value as a parsed Short
+	 * @return returns the Short stored using the given key
 	 * 
 	 * */
 	
 	public Short getShort(final String key) {
-		return Short.parseShort((String) getString(key));
+		return Short.parseShort(getString(key));
 	}
 
 	/**
-	 * Returns the value stored using that key as a parsed Integer
+	 * Returns the Integer stored using that key
 	 * 
 	 * @param key the key to get the value of
 	 * 
-	 * @return returns the value as a parsed Integer
+	 * @return returns the Integer stored using the given key
 	 * 
 	 * */
 	
 	public Integer getInteger(final String key) {
-		return Integer.parseInt((String) getString(key));
+		return Integer.parseInt(getString(key));
 	}
 	
 	/**
-	 * Returns the value stored using that key as a parsed Long
+	 * Returns the Long stored using that key
 	 * 
 	 * @param key the key to get the value of
 	 * 
-	 * @return returns the value as a parsed Long
+	 * @return returns the Long stored using the given key
 	 * 
 	 * */
 
 	public Long getLong(final String key) {
-		return Long.parseLong((String) getString(key));
+		return Long.parseLong(getString(key));
 	}
 
 	/**
-	 * Returns the value stored using that key as a parsed Float
+	 * Returns the Float stored using that key
 	 * 
 	 * @param key the key to get the value of
 	 * 
-	 * @return returns the value as a parsed Float
+	 * @return returns the Float stored using the given key
 	 * 
 	 * */
 	
 	public Float getFloat(final String key) {
-		return Float.parseFloat((String) getString(key));
+		return Float.parseFloat(getString(key));
 	}
 
 	/**
-	 * Returns the value stored using that key as a parsed Double
+	 * Returns the Double stored using that key
 	 * 
 	 * @param key the key to get the value of
 	 * 
-	 * @return returns the value as a parsed Double
+	 * @return returns the Double stored using the given key
 	 * 
 	 * */
 	
 	public Double getDouble(final String key) {
-		return Double.parseDouble((String) getString(key));
+		return Double.parseDouble(getString(key));
 	}
 	
 	/**
@@ -291,7 +351,7 @@ public class ParameterContainer {
 	 * */
 	
 	public ParameterContainer clone() {
-		return new ParameterContainer().addAll(this);
+		return new ParameterContainer().setAll(this);
 	}
 	
 	/**

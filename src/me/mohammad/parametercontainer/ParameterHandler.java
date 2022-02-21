@@ -63,7 +63,7 @@ public class ParameterHandler {
 				System.out.printf("Invalid Syntax at: \"%s\"", nextLine);
 				return container;
 			}
-			container.add(args[0], args[1]);
+			container.set(args[0], args[1]);
 		}
 		reader.close();
 		return container;
@@ -106,7 +106,7 @@ public class ParameterHandler {
 	public static ParameterContainer create(final ParameterEntry... entries) {
 		final ParameterContainer container = new ParameterContainer();
 		for (final ParameterEntry entry : entries)
-			container.add(entry);
+			container.set(entry);
 		return container;
 	}
 	
