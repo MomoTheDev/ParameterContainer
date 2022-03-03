@@ -74,6 +74,22 @@ public class ParameterHandler {
 		}
 	}
 	
+	private static void writeObject(final FileWriter writer, final String key, final Object object, final String suffix) throws IOException {
+		if (object instanceof List<?>) {
+			writeList(writer, new StringBuilder("LIST-["), key, (List<?>) object);
+			return;
+		}
+		writer.write(String.format("%s: %s%s", key, object, suffix));
+	}
+	
+	private static void writeList(final FileWriter writer, final StringBuilder builder, final String key, final List<?> list) throws IOException {
+		for (final Object object : list) {
+			builder.append(String.format("%s, ", object));
+		}
+		builder.append("]");
+		writeObject(writer, key, builder.toString(), "\n");
+	}
+	
 	/**
 	 * Creates a ParameterContainer using the entries in the file
 	 * 
@@ -124,8 +140,9 @@ public class ParameterHandler {
 			file.delete();
 			file.createNewFile();
 			final FileWriter writer = new FileWriter(file);;
-			for (final Map.Entry<String, Object> entry : container.getMapEntries())
-				writer.write(String.format("%s : %s\n", entry.getKey(), entry.getValue()));
+			for (final Map.Entry<String, Object> entry : container.getMapEntries()) {
+				writeObject(writer, entry.getKey(), entry.getValue(), "\n");
+			}
 			writer.close();
 			return file;
 		} catch (IOException e) {
