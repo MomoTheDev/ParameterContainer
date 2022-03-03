@@ -225,6 +225,19 @@ public class ParameterContainer {
 	public Object get(final String key) {
 		return parameters.get(key);
 	}
+
+	/**
+	 * Returns the List stored using that key
+	 * 
+	 * @param key the key to get the list of
+	 * 
+	 * @return returns the List stored using the given key
+	 * 
+	 * */
+	
+	public List<?> getList(final String key) {
+		return (List<?>) get(key);
+	}
 	
 	/**
 	 * Returns the Character stored using that key
@@ -240,6 +253,19 @@ public class ParameterContainer {
 	}
 
 	/**
+	 * Returns the List of Characters stored using that key
+	 * 
+	 * @param key the key to get the list of
+	 * 
+	 * @return returns the List of Characters stored using the given key
+	 * 
+	 * */
+	
+	public List<Character> getCharacterList(final String key) {
+		return (List<Character>) getList(key);
+	}
+
+	/**
 	 * Returns the String stored using that key
 	 * 
 	 * @param key the key to get the value of
@@ -250,6 +276,19 @@ public class ParameterContainer {
 	
 	public String getString(final String key) {
 		return String.valueOf(get(key));
+	}
+
+	/**
+	 * Returns the List of Strings stored using that key
+	 * 
+	 * @param key the key to get the list of
+	 * 
+	 * @return returns the List of Strings stored using the given key
+	 * 
+	 * */
+	
+	public List<String> getStringList(final String key) {
+		return (List<String>) getList(key);
 	}
 	
 	/**
@@ -263,6 +302,19 @@ public class ParameterContainer {
 	
 	public Boolean getBoolean(final String key) {
 		return Boolean.parseBoolean(getString(key));
+	}
+
+	/**
+	 * Returns the List of Booleans stored using that key
+	 * 
+	 * @param key the key to get the list of
+	 * 
+	 * @return returns the List of Booleans stored using the given key
+	 * 
+	 * */
+	
+	public List<Boolean> getBooleanList(final String key) {
+		return (List<Boolean>) getList(key);
 	}
 	
 	/**
@@ -279,6 +331,19 @@ public class ParameterContainer {
 	}
 
 	/**
+	 * Returns the List of Bytes stored using that key
+	 * 
+	 * @param key the key to get the list of
+	 * 
+	 * @return returns the List of Bytes stored using the given key
+	 * 
+	 * */
+	
+	public List<Byte> getByteList(final String key) {
+		return (List<Byte>) getList(key);
+	}
+	
+	/**
 	 * Returns the Short stored using that key
 	 * 
 	 * @param key the key to get the value of
@@ -292,6 +357,19 @@ public class ParameterContainer {
 	}
 
 	/**
+	 * Returns the List of Shorts stored using that key
+	 * 
+	 * @param key the key to get the list of
+	 * 
+	 * @return returns the List of Shorts stored using the given key
+	 * 
+	 * */
+	
+	public List<Short> getShortList(final String key) {
+		return (List<Short>) getList(key);
+	}
+
+	/**
 	 * Returns the Integer stored using that key
 	 * 
 	 * @param key the key to get the value of
@@ -302,6 +380,19 @@ public class ParameterContainer {
 	
 	public Integer getInteger(final String key) {
 		return Integer.parseInt(getString(key));
+	}
+
+	/**
+	 * Returns the List of Integers stored using that key
+	 * 
+	 * @param key the key to get the list of
+	 * 
+	 * @return returns the List of Integers stored using the given key
+	 * 
+	 * */
+	
+	public List<Integer> getIntegerList(final String key) {
+		return (List<Integer>) getList(key);
 	}
 	
 	/**
@@ -318,6 +409,19 @@ public class ParameterContainer {
 	}
 
 	/**
+	 * Returns the List of Longs stored using that key
+	 * 
+	 * @param key the key to get the list of
+	 * 
+	 * @return returns the List of Longs stored using the given key
+	 * 
+	 * */
+	
+	public List<Long> getLongList(final String key) {
+		return (List<Long>) getList(key);
+	}
+	
+	/**
 	 * Returns the Float stored using that key
 	 * 
 	 * @param key the key to get the value of
@@ -329,18 +433,44 @@ public class ParameterContainer {
 	public Float getFloat(final String key) {
 		return Float.parseFloat(getString(key));
 	}
-
+	
+	/**
+	 * Returns the List of Floats stored using that key
+	 * 
+	 * @param key the key to get the list of
+	 * 
+	 * @return returns the List of Floats stored using the given key
+	 * 
+	 * */
+	
+	public List<Float> getFloatList(final String key) {
+		return (List<Float>) getList(key);
+	}
+	
 	/**
 	 * Returns the Double stored using that key
 	 * 
 	 * @param key the key to get the value of
 	 * 
-	 * @return returns the Double stored using the given key
+	 * @return returns the Doubles stored using the given key
 	 * 
 	 * */
 	
 	public Double getDouble(final String key) {
 		return Double.parseDouble(getString(key));
+	}
+	
+	/**
+	 * Returns the List of Doubles stored using that key
+	 * 
+	 * @param key the key to get the list of
+	 * 
+	 * @return returns the List of Double stored using the given key
+	 * 
+	 * */
+	
+	public List<Double> getDoubleList(final String key) {
+		return (List<Double>) getList(key);
 	}
 	
 	/**

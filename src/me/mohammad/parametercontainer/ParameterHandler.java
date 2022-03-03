@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -40,6 +42,38 @@ public class ParameterHandler {
 		invalid.accept(key);
 	}
 	
+	protected static boolean isList(final String argument) {
+		if (!(argument.startsWith("LIST-[")))
+			return false;
+		if (!(argument.endsWith("]")))
+			return false;
+		return true;
+	}
+	
+	private static void setList(final ParameterContainer container, final String key, final String value) {
+		final List<Object> list = new ArrayList<>();
+		final String[] splitted = value.substring(6, value.length() - 1).split("\\s*,\\s*");
+		for (final String listObject : splitted) {
+			if (isList(listObject)) {
+				setList(list, listObject);
+				continue;
+			}
+			list.add(listObject);
+		}
+		container.set(key, list);
+	}
+	
+	private static void setList(final List<Object> list, final String value) {
+		final String[] splitted = value.substring(6, value.length() - 1).split("\\s*,\\s*");
+		for (final String listObject : splitted) {
+			if (isList(listObject)) {
+				setList(list, listObject);
+				continue;
+			}
+			list.add(listObject);
+		}
+	}
+	
 	/**
 	 * Creates a ParameterContainer using the entries in the file
 	 * 
@@ -57,11 +91,17 @@ public class ParameterHandler {
 		String nextLine;
 		final BufferedReader reader = new BufferedReader(fileReader);
 		while ((nextLine = reader.readLine()) != null) {
-			final String[] args = nextLine.split(" : ");
+			if (nextLine.isBlank())
+				continue;
+			final String[] args = nextLine.split("\\s*:\\s*", 2);
 			if (args.length != 2) {
 				reader.close();
-				System.out.printf("Invalid Syntax at: \"%s\"", nextLine);
+				System.out.printf("Invalid Syntax at: \"%s\"\n", nextLine);
 				return container;
+			}
+			if (isList(args[1])) {
+				setList(container, args[0], args[1]);
+				continue;
 			}
 			container.set(args[0], args[1]);
 		}
